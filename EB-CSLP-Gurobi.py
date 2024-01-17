@@ -53,23 +53,34 @@ for k in K:
     for j in V:
         d[(k, j)] = haversine.main(tcK[k], tyK[k], tcV[j], tyV[j])
 
-# Printing distances dictionary
-# print("\n")
-# for entry in d:
-#     print(entry, d[entry])
+#Printing distances dictionary
+print("\n")
+for entry in d:
+    print(entry, d[entry])
 
-# t = {}
-# from scipy.spatial import distance
-# for k in K:
-#     for j in N:
-#         t[(k, j)] = distance.euclidean([tcK[k], tyK[k]], [tcN[j], tyN[j]])
-# print(t)
+u = 26000/ 60 # https://www.researchgate.net/publication/272687997_Energy_and_Environmental_Impacts_of_Urban_Buses_and_Passenger_Cars-Comparative_Analysis_of_Sensitivity_to_Driving_Conditions/figures?lo=1
 
-# a = {}
-# for i in M:
-#     for j in N:
-#         a[(i, j)] = rnd.randint(0, 2)
-# print(a)
+
+t = {}
+from scipy.spatial import distance
+for k in K:
+    for j in V:
+        t[(k, j)] = d[(k, j)]/ u
+
+#Printing distances dictionary
+print("\n")
+for entry in t:
+    print(entry, t[entry])
+
+a = {}
+for i in M:
+    for j in V:
+        a[(i, j)] = 1
+
+#Printing distances dictionary
+print("\n")
+for entry in a:
+    print(entry, a[entry])
 
 # xcK = {i: rnd.randint(100, 200) for i in K}
 # xyK = {i: rnd.randint(100, 200) for i in K}
