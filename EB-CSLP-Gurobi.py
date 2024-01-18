@@ -59,7 +59,7 @@ for k in K:
     for j in N:
         d[(k, j)] = haversine.main(tcK[k], tyK[k], tcV[theta[j]], tyV[theta[j]])
 
-#Printing distances dictionary
+# Printing distances dictionary
 # print("\n")
 # print("Printing distances matrix in meters: ")
 # for k in K:
@@ -77,12 +77,12 @@ for k in K:
         t[(k, j)] = d[(k, j)] / avg_u
 
 # Printing travel times dictionary
-print("\n")
-print("Printing travel times matrix in minutes: ")
-for k in K:
-    for j in N:
-        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-    print("\r")
+# print("\n")
+# print("Printing travel times matrix in minutes: ")
+# for k in K:
+#     for j in N:
+#         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+#     print("\r")
 
 a = {}
 for i in M:
@@ -136,11 +136,7 @@ values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
 for name, val in zip(names, values):
-    if val != 0:
-        print(f"{name} = {val}")
-
-# Write the LP file
-model.write("model.lp")
+    print(f"{name} = {val}")
 
 if model.status == GRB.OPTIMAL:
     print("Optimal solution found")

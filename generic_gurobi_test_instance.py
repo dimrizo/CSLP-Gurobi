@@ -23,6 +23,3 @@ model.optimize()
 # Check if the optimization was successful
 if model.status == GRB.OPTIMAL:
     print("Optimal solution found")
-
-# Write the LP file
-model.write("model.lp")
