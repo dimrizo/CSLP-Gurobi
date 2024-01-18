@@ -39,7 +39,6 @@ tyK = {1:23.7816, 2:23.7345, 3:23.7695}
 tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932, 5:37.9621, 6:37.9502, 7:37.9306}
 tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930, 5:23.7711, 6:23.7571, 7:23.7176}
 
-
 # Printing coordinates
 # print("\n")
 # print(tcK)
@@ -55,39 +54,41 @@ for k in K:
 
 #Printing distances dictionary
 print("\n")
-for entry in d:
-    print(entry, d[entry])
-
-u = 26000/ 60 # https://www.researchgate.net/publication/272687997_Energy_and_Environmental_Impacts_of_Urban_Buses_and_Passenger_Cars-Comparative_Analysis_of_Sensitivity_to_Driving_Conditions/figures?lo=1
-
-
-t = {}
-from scipy.spatial import distance
+print("Printing distances matrix in meters: ")
 for k in K:
     for j in V:
-        t[(k, j)] = d[(k, j)]/ u
+        print("(", k, ",", j, "):", round(d[(k, j)], 2),  end=", ")
+    print("\r")
 
-#Printing distances dictionary
+# Average bus speed for urban environments extracted from:
+# https://www.researchgate.net/publication/272687997_Energy_and_Environmental_Impacts_of_Urban_Buses_and_Passenger_Cars-Comparative_Analysis_of_Sensitivity_to_Driving_Conditions/figures?lo=1
+avg_u = 26000 / 60
+
+t = {}
+for k in K:
+    for j in V:
+        t[(k, j)] = d[(k, j)] / avg_u
+
+#Printing travel times dictionary
 print("\n")
-for entry in t:
-    print(entry, t[entry])
+print("Printing travel times matrix in minutes: ")
+for k in K:
+    for j in V:
+        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+    print("\r")
 
 a = {}
 for i in M:
     for j in V:
         a[(i, j)] = 1
 
-#Printing distances dictionary
+#Printing connection feasibility matrix
 print("\n")
-for entry in a:
-    print(entry, a[entry])
-
-# xcK = {i: rnd.randint(100, 200) for i in K}
-# xyK = {i: rnd.randint(100, 200) for i in K}
-# xcN = {i: rnd.randint(100, 200) for i in N}
-# xyN = {i: rnd.randint(100, 200) for i in N}
-
-
+print("Printing connection feasibility matrix: ")
+for k in K:
+    for j in V:
+        print("(", k, ",", j, "):", a[(k, j)],  end=", ")
+    print("\r")
 
 # B = 1000
 # b = {i: rnd.randint(100, 900) for i in N}
@@ -95,7 +96,6 @@ for entry in a:
 # e = 5
 
 # tau = {k: rnd.randint(1, 24) for k in K}
-
 
 # # Initialize the Gurobi model
 # model = gp.Model()
