@@ -100,7 +100,7 @@ for i in M:
 B = 1000000
 b = {1:700, 2:750, 3:500, 4:550, 5:600, 6:650, 7:900, 8:950, 9:300, 10:350, 11:700, 12:750, 13:1100, 14:1150}
 
-consumption_e = 0.00074/ 60 # in kWh/meter (apo th texnikh ekthesi "Yphresies aksiologhshs programmatos pilotikhs kyklloforias hlektrikon leoforeion"
+consumption_e = 0.00074 # in kWh/meter (apo th texnikh ekthesi "Yphresies aksiologhshs programmatos pilotikhs kyklloforias hlektrikon leoforeion"
 
 # Initialize the Gurobi model
 model = gp.Model()
@@ -127,7 +127,11 @@ for j in N:
         if (j != r) & (theta[j] == theta[r]):
             model.addConstr(x[j] + x[r] <= 1)
 
-model.addConstrs(u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j] for i in N for k in K for f in F) # Constraint (14)
+# for k in K:
+#     for j in N:
+#         for f in F:
+#             model.addConstr(u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j])  # Constraint (14)
+
 
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 model.optimize()
