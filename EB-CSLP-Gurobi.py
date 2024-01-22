@@ -22,7 +22,7 @@ M = [i for i in range(1, m+1)] # set of all bus trips
 K = [i for i in range(1, k+1)] # set of all trips that need charging
 F = [i for i in range(1, f+1)] # set of charging time slots
 charging_slots_starting_times = {i:(540 + i * 60) for i in F}
-tau = {1: 2, 2: 3, 3: 5}
+tau = {1: 200, 2: 300, 3: 500}
 
 print("Set N: ", N)
 print("Set N1: ", N1)
@@ -118,15 +118,12 @@ model.addConstr(sum(x[j] * b[j] for j in N) <= B) # Constraint (6)
 model.addConstrs(q[k, j] <= x[j] for k in K for j in N) # Constraint (7)
 model.addConstrs(sum(q[k, j] for j in N) == 1 for k in K) # Constraint (8)
 model.addConstrs(u[k, j, f] <= q[k, j] for k in K for j in N for f in F) # new constraint
-model.addConstrs(sum(sum(u[k, j, f] for f in F) for j in N2) == 1 for k in K) # Constraint (9)
-# for k in K:
-#     cum = gp.LinExpr()
-#     for j in N1:
-#         for f in F:
-#             if f != 10:
-#              cum += u[k, j, f]
-#     model.addConstr(cum <= 2) # alt. 10
+model.addConstrs(sum(sum(u[k, j, f] for f in F) for j in N) >= 1 for k in K) # Constraint (9)
+
+# prepei an u[k, j ,f] == 1 gia j anhkei sto N1, tote u[k, j ,f+1] == 1
+
 # model.addConstrs(sum(sum(u[k, j, f] + u[k, j, f+1] for f in F if f != 10) for j in N1) == 2 for k in K) # Constraint (10)
+
 model.addConstrs(sum(u[k, j, f] for k in K) <= 1 for j in N for f in F) # Constraint (11)
 model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (12)
 # Constraint (13)
@@ -134,8 +131,10 @@ for j in N:
     for r in range(j, len(N)+1):
         if (j != r) & (theta[j] == theta[r]):
             model.addConstr(x[j] + x[r] <= 1)
+model.addConstrs(u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N for f in F) # Constraint (14)
 
-# model.addConstrs(u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j] for j in N for k in K for f in F) # Constraint (14)
+# test constraint 
+# model.addConstrs(u[k, j, f+1] - u[k, j, f] == 0 for k in K for j in N1 for f in F if f != 10) # Constraint (10)
 
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 model.optimize()
@@ -147,7 +146,6 @@ names = model.getAttr("VarName", all_vars)
 for name, val in zip(names, values):
     if val != 0:
         print(f"{name} = {val}")
-
 
 if model.status == GRB.OPTIMAL:
     print("Optimal solution found")
