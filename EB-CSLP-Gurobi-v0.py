@@ -12,6 +12,7 @@ m = 10
 k = 3
 f = 10
 theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4, 9:5, 10:5, 11:6, 12:6, 13:7, 14:7} # N -> V
+BigM = 100000
 
 # SETS
 N = [i for i in range(1, n+1)] # set of all possible station installation options
@@ -22,6 +23,7 @@ M = [i for i in range(1, m+1)] # set of all bus trips
 K = [i for i in range(1, k+1)] # set of all trips that need charging
 F = [i for i in range(1, f+1)] # set of charging time slots
 charging_slots_starting_times = {i:(540 + i * 60) for i in F}
+print(charging_slots_starting_times)
 tau = {1: 2, 2: 3, 3: 5}
 
 print("Set N: ", N)
@@ -76,13 +78,13 @@ for k in K:
     for j in N:
         t[(k, j)] = d[(k, j)] / avg_u
 
-# Printing travel times dictionary
-# print("\n")
-# print("Printing travel times matrix in minutes: ")
-# for k in K:
-#     for j in N:
-#         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-#     print("\r")
+#Printing travel times dictionary
+print("\n")
+print("Printing travel times matrix in minutes: ")
+for k in K:
+    for j in N:
+        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+    print("\r")
 
 a = {}
 for i in M:
@@ -118,11 +120,11 @@ model.addConstr(sum(x[j] * b[j] for j in N) <= B) # Constraint (6)
 model.addConstrs(q[k, j] <= x[j] for k in K for j in N) # Constraint (7)
 model.addConstrs(sum(q[k, j] for j in N) == 1 for k in K) # Constraint (8)
 
-model.addConstrs(u[k, j, f] <= q[k, j] for k in K for j in N for f in F) # new constraint
+model.addConstrs(sum(u[k, j, f] for f in F) <= q[k, j] for k in K for j in N) # new constraint
 
-model.addConstrs(sum(sum(u[k, j, f] for f in F) for j in N) >= 1 for k in K) # Constraint (9)
+model.addConstrs(sum(sum(u[k, j, f] for f in F) for j in N) == 1 for k in K) # Constraint (9)
 
-model.addConstrs(u[k, j, f] - u[k, j, f+1] <= u[k, j, f-1] for j in N1 for k in K for f in F if f != 10 if f != 1) # new constraint
+#model.addConstrs(u[k, j, f] - u[k, j, f+1] <= u[k, j, f-1] for j in N1 for k in K for f in F if f != 10 if f != 1) # new constraint
 
 #model.addConstrs(u[k, j, f] - u[k, j, f+1] == 0 for j in N1 for k in K for f in F if f == 1 if f != 10) # new constraint
 
@@ -133,8 +135,10 @@ model.addConstrs(u[k, j, f] - u[k, j, f+1] <= u[k, j, f-1] for j in N1 for k in 
 #         for f in F:
 #             if f != 10:
 
-model.addConstrs(sum(sum(u[k, j, f] + u[k, j, f+1] for f in F if f != 10) for j in N1) >= 3 for k in K) # Constraint (10) mod
-model.addConstrs(sum(sum(u[k, j, f] + u[k, j, f+1] for f in F if f != 10) for j in N1) <= 4 for k in K) # Constraint (10) mod
+model.addConstrs(sum(sum(u[k, j, f] + u[k, j, f+1] for f in F if f != 10) for j in N1) == 2 for k in K) # Constraint (10) mod
+#model.addConstrs(sum(sum(u[k, j, f] for f in F) for j in N) <= 2 for k in K)
+
+#model.addConstrs(sum(sum(u[k, j, f] + u[k, j, f+1] for f in F if f != 10) for j in N1) <= 4 for k in K) # Constraint (10) mod
 
 model.addConstrs(sum(u[k, j, f] for k in K) <= 1 for j in N for f in F) # Constraint (11)
 
@@ -146,9 +150,10 @@ for j in N:
         if (j != r) & (theta[j] == theta[r]):
             model.addConstr(x[j] + x[r] <= 1)
 
-#model.addConstrs(u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N for f in F) # Constraint (14)
+model.addConstrs((1-u[k, j, f])*BigM + u[k, j, f] * charging_slots_starting_times[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N for f in F) # Constraint (14)
 
-# test constraint 
+
+# test constraint
 # model.addConstrs(u[k, j, f+1] - u[k, j, f] == 0 for k in K for j in N1 for f in F if f != 10) # Constraint (10)
 
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
