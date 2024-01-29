@@ -1,5 +1,5 @@
 # Railways and Transport Laboratory, National Technical University of Athens
-# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 2
+# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 1.5
 
 import gurobipy as gp
 from gurobipy import GRB
@@ -8,15 +8,13 @@ import re
 import haversine
 
 # example
-n = 32 # Number of charging options
-v = 16 # Number of candidate locations for charging stations
-m = 20 # Total number of bus lines in the problem
-k = 12 # Number of charging lines in the problem
-f1 = 8 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
-f2 = 16 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
-theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4, 9:5, 10:5, 11:6, 12:6, 13:7, 14:7,
-         15:8, 16:8, 17:9, 18:9, 19:10, 20:10, 21:11, 22:11, 23:12, 24:12,
-         25:13, 26:13, 27:14, 28:14, 29:15, 30:15, 31:16, 32:16} # N -> V
+n = 14 # Number of charging options
+v = 7 # Number of candidate locations for charging stations
+m = 10 # Total number of bus lines in the problem
+k = 3 # Number of charging lines in the problem
+f1 = 2 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
+f2 = 12 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
+theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4, 9:5, 10:5, 11:6, 12:6, 13:7, 14:7} # N -> V
 BigM = 100000
 
 # SETS
@@ -29,10 +27,14 @@ K = [i for i in range(1, k+1)] # set of all trips that need charging
 F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
 F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 
-# Assuming continuous time reprsentation for a daily schedule 0-1440. Time slots start at 600, meaning 10 a.m.
-charging_slots_starting_times_slow = {i:(480 + i * 120) for i in F1} # Here we assume continuous time representation. We consider that \
+# assuming continuous time reprsentation for a daily schedule 0-1440 \
+# In order to "force" a solution with both slow and dast cahrgers,   \
+# in this example we have really few slow chargers' slots whose      \
+# slots start really early as compared to the fast chargers that     \
+# start later in the day.
+charging_slots_starting_times_slow = {i:(300 + i * 60) for i in F1} # Here we assume continuous time representation. We consider that \
 charging_slots_starting_times_fast = {i:(540 + i * 60) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min. 
-tau = {k:(610 + k * 60) for k in K}
+tau = {1: 320, 2: 360 , 3: 421}
 
 print("Set N: ", N)
 print("Set N1: ", N1)
@@ -52,18 +54,10 @@ SOC = {}
 for k in K:SOC[k] = 100 # in kWh
 SOC_min = 20 # in kWh
 
-tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.86458085, 5:37.94977755, 6:37.93979030,
-       7:37.96400889, 8:38.08595084, 9:38.01198386, 10:38.00652461, 11:38.00982034,
-       12:38.08352637}
-tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.74993511, 5:23.61136170, 6:23.64347823,	
-       7:23.72687208, 8:23.80024055, 9:23.82227409, 10:23.86074321, 11:23.68940964,
-       12:23.73710921}
-tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932, 5:37.9621, 6:37.9502, 7:37.9306, 
-       8:37.97425466, 9:37.96875717, 10:37.95574590, 11:37.97936371, 12:38.03608291,
-       13:38.07543502, 14:38.05257325, 15:37.95933545, 16:37.89613866}
-tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930, 5:23.7711, 6:23.7571, 7:23.7176,
-       8:23.70043667, 9:23.73711792, 10:23.70088278, 11:23.62636448, 12:23.67475856,
-       13:23.75169645, 14:23.84691854, 15:23.86043905, 16:23.73696256}
+tcK = {1:37.9718, 2:37.9812, 3:38.0355}
+tyK = {1:23.7816, 2:23.7345, 3:23.7695}
+tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932, 5:37.9621, 6:37.9502, 7:37.9306}
+tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930, 5:23.7711, 6:23.7571, 7:23.7176}
 
 # Printing coordinates
 # print("\n")
@@ -117,9 +111,7 @@ for i in M:
 #     print("\r")
 
 B = 1000000
-b = {1:700, 2:750, 3:500, 4:550, 5:600, 6:650, 7:900, 8:950, 9:300, 10:350, 11:700, 12:750, 13:1100, 14:1150,
-     15:830, 16:880, 17:930, 18:980, 19:330, 20:380, 21:450, 22:500, 23:900, 24:980, 25:200, 26:250, 27:450, 
-     28:500, 29:700, 30:750, 31:690, 32:740}
+b = {1:700, 2:750, 3:500, 4:550, 5:600, 6:650, 7:900, 8:950, 9:300, 10:350, 11:700, 12:750, 13:1100, 14:1150}
 
 consumption_e = 0.00074 # in kWh/meter (apo th texnikh ekthesi "Yphresies aksiologhshs programmatos pilotikhs kyklloforias hlektrikon leoforeion"
 
@@ -158,22 +150,20 @@ for j in N:
 model.addConstrs((1-u_slow[k, j, f])*BigM + u_slow[k, j, f] * charging_slots_starting_times_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
 model.addConstrs((1-u_fast[k, j, f])*BigM + u_fast[k, j, f] * charging_slots_starting_times_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
 
-# Setting objective function for the problem
+# model.addConstr(u_fast[1, 10, 1] == 1)
+# model.addConstr(u_slow[2, 9, 3] == 1)
+# model.addConstr(u_fast[3, 6, 1] == 1)
+
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 model.optimize()
 
-# Printing all variables
 all_vars = model.getVars()
 values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
-print("\r")
 for name, val in zip(names, values):
     if val != 0:
         print(f"{name} = {val}")
 
-# Printing model solution status
 if model.status == GRB.OPTIMAL:
-    print("\r")
     print("Optimal solution found")
-    print("Objective function value for solution: ", model.objVal)
