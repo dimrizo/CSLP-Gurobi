@@ -12,7 +12,7 @@ n = 32 # Number of charging options
 v = 16 # Number of candidate locations for charging stations
 m = 20 # Total number of bus lines in the problem
 k = 12 # Number of charging lines in the problem
-f1 = 8 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
+f1 = 4 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
 f2 = 16 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
 theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4, 9:5, 10:5, 11:6, 12:6, 13:7, 14:7,
          15:8, 16:8, 17:9, 18:9, 19:10, 20:10, 21:11, 22:11, 23:12, 24:12,
@@ -30,9 +30,9 @@ F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
 F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 
 # Assuming continuous time reprsentation for a daily schedule 0-1440. Time slots start at 600, meaning 10 a.m.
-charging_slots_starting_times_slow = {i:(480 + i * 120) for i in F1} # Here we assume continuous time representation. We consider that \
-charging_slots_starting_times_fast = {i:(540 + i * 60) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min. 
-tau = {k:(610 + k * 60) for k in K}
+charging_slots_starting_times_slow = {i:(360 + i * 240) for i in F1} # Here we assume continuous time representation. We consider that \
+charging_slots_starting_times_fast = {i:(700 + i * 60) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min. 
+tau = {k:(500 + k * 60) for k in K}
 
 print("Set N: ", N)
 print("Set N1: ", N1)
