@@ -10,9 +10,10 @@ import haversine
 n = 8 # Number of charging options
 v = 4 # Number of candidate locations for charging stations
 m = 50 # Total number of bus lines in the problem
-k = 10 # Number of charging lines in the problem
+k = 10 # Number of charging lines in the problem, den epanalamvanontai
 f1 = 6 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
 f2 = 12 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
+pk = {1: 710, 2: 760, 3: 810, 4: 840, 5: 910, 6: 990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
 theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4} # N -> V
 BigM = 100000
 
@@ -54,7 +55,7 @@ tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445, 6:23.7685, 7:23.72
 tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932}
 tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930}
 
-# Printing coordinates
+#Printing coordinates
 # print("\n")
 # print(tcK)
 # print(tyK)
@@ -85,12 +86,12 @@ for k in K:
         t[(k, j)] = d[(k, j)] / avg_u
 
 # Printing travel times dictionary
-# print("\n")
-# print("Printing travel times matrix in minutes: ")
-# for k in K:
-#     for j in N:
-#         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-#     print("\r")
+print("\n")
+print("Printing travel times matrix in minutes: ")
+for k in K:
+    for j in N:
+        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+    print("\r")
 
 a = {}
 for i in M:
@@ -125,6 +126,7 @@ model.addConstrs(sum(a[i, j] * x[j] for j in N) - 1 >= 0 for i in M) # Constrain
 model.addConstrs(sum(t[k, j] * q[k, j] for j in N) == y[k] for k in K) # Constraint (5)
 model.addConstr(sum(x[j] * b[j] for j in N) <= B) # Constraint (6)
 model.addConstrs(q[k, j] <= x[j] for k in K for j in N) # Constraint (7)
+model.addConstrs(sum(q[k, j] for k in K) >= x[j] for j in N) #To ensure that xj does not take value of 1 if no trip is assigned to charging station j
 model.addConstrs(sum(q[k, j] for j in N) == 1 for k in K) # Constraint (8)
 
 model.addConstrs(sum(u_slow[k, j, f] for f in F1) + sum(u_fast[k, j, f] for f in F2) <= q[k, j] for k in K for j in N) # new constraint
@@ -136,6 +138,7 @@ model.addConstrs(sum(u_fast[k, j, f] for k in K) <= 1 for j in N2 for f in F2) #
 
 model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (12)
 
+
 # Constraint (13)
 for j in N:
     for r in range(j, len(N)+1):
@@ -144,6 +147,9 @@ for j in N:
 
 model.addConstrs((1-u_slow[k, j, f])*BigM + u_slow[k, j, f] * charging_slots_starting_times_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
 model.addConstrs((1-u_fast[k, j, f])*BigM + u_fast[k, j, f] * charging_slots_starting_times_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
+
+model.addConstrs(-(1-u_slow[k, j, f])*BigM + u_slow[k, j, f] * charging_slots_starting_times_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
+model.addConstrs(-(1-u_fast[k, j, f])*BigM + u_fast[k, j, f] * charging_slots_starting_times_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
 
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 model.optimize()
