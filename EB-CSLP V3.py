@@ -1,5 +1,5 @@
 # Railways and Transport Laboratory, National Technical University of Athens
-# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 1
+# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 3
 
 import gurobipy as gp
 from gurobipy import GRB
@@ -13,7 +13,6 @@ m = 50 # Total number of bus lines in the problem
 k = 10 # Number of charging lines in the problem, den epanalamvanontai
 f1 = 6 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
 f2 = 12 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
-pk = {1: 710, 2: 760, 3: 810, 4: 840, 5: 910, 6: 990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
 theta = {1:1, 2:1, 3:2, 4:2, 5:3, 6:3, 7:4, 8:4} # N -> V
 BigM = 100000
 
@@ -31,6 +30,8 @@ F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 charging_slots_starting_times_slow = {i:(480 + i * 120) for i in F1} # Here we assume continuous time representation. We consider that \
 charging_slots_starting_times_fast = {i:(540 + i * 60) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
 tau = {1: 610, 2: 660, 3: 710, 4: 740, 5: 810, 6: 890, 7:910, 8:1000, 9:1010, 10:1050}
+pk = {1:710, 2:760, 3:810, 4:840, 5:910, 6:990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
+# pk = {1:1440, 2:1440, 3:1440, 4:1440, 5:1440, 6:1440, 7:1440, 8:1440, 9:1440, 10:1440} #xronos meta thn fortisi
 
 print("Set N: ", N)
 print("Set N1: ", N1)
@@ -44,10 +45,12 @@ print("Set F2: ", F2)
 print("Charging slots starting times for SLOW chargers:", charging_slots_starting_times_slow)
 print("Charging slots starting times for FAST chargers:", charging_slots_starting_times_fast)
 print("tau:", tau)
+print("After charging time limit:", pk)
 
 # Parameters
 SOC = {}
-for k in K:SOC[k] = 100 # in kWh
+for k in K:
+    SOC[k] = 100 # in kWh
 SOC_min = 20 # in kWh
 
 tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455, 6:37.9712, 7:38.0585, 8:37.9822, 9:37.9612, 10:38.0555}
@@ -55,7 +58,7 @@ tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445, 6:23.7685, 7:23.72
 tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932}
 tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930}
 
-#Printing coordinates
+# Printing coordinates
 # print("\n")
 # print(tcK)
 # print(tyK)
@@ -86,12 +89,12 @@ for k in K:
         t[(k, j)] = d[(k, j)] / avg_u
 
 # Printing travel times dictionary
-print("\n")
-print("Printing travel times matrix in minutes: ")
-for k in K:
-    for j in N:
-        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-    print("\r")
+# print("\n")
+# print("Printing travel times matrix in minutes: ")
+# for k in K:
+#     for j in N:
+#         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+#     print("\r")
 
 a = {}
 for i in M:
@@ -158,6 +161,7 @@ all_vars = model.getVars()
 values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
+print("\r")
 for name, val in zip(names, values):
     if val != 0:
         print(f"{name} = {val}")

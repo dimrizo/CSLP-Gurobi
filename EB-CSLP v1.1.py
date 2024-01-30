@@ -51,7 +51,8 @@ print("tau:", tau)
 
 # Parameters
 SOC = {}
-for k in K:SOC[k] = 100 # in kWh
+for k in K:
+    SOC[k] = 100 # in kWh
 SOC_min = 20 # in kWh
 
 tcK = {1:37.9718, 2:37.9812, 3:38.0355}
