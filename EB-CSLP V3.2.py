@@ -17,8 +17,8 @@ big_M = 100000  # A big number M
 
 # Sets
 N     = [i for i in range(1, n+1)] # set of all possible station installation options
-N1    = [1, 2] # Charging option indices for SLOW chargers
-N2    = [3, 4] # Charging option indices for FAST chargers
+N1    = [1, 2, 3, 4] # Charging option indices for SLOW chargers
+N2    = [] # Charging option indices for FAST chargers
 theta = {1:1, 2:2, 3:3, 4:4} # N -> V
 
 V  = [i for i in range(1, v+1)] # set of all possible charging station physical locations
@@ -33,7 +33,7 @@ charging_slots_starting_times_fast = {i:(540 + i * 60) for i in F2}  # fast char
 tau = {1: 610, 2: 660, 3: 710, 4: 740, 5: 810, 6: 890, 7:910, 8:1000, 9:1010, 10:1050}
 # pk = {1:710, 2:760, 3:810, 4:840, 5:910, 6:990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
 # pk = {1: 680, 2: 730, 3: 780, 4: 810, 5: 880, 6: 960, 7:980, 8:1070, 9:1080, 10:1120} #xronos meta thn fortisi
-pk = {1: 1440, 2: 1440, 3: 1440, 4: 1440, 5: 1440, 6: 1440, 7:1440, 8:1440, 9:1440, 10:1440} #xronos meta thn fortisi
+pk = {i:(tau[i] + 87) for i in tau}
 
 # Parameters
 SOC = {}
