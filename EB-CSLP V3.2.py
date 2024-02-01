@@ -1,29 +1,29 @@
 # Railways and Transport Laboratory, National Technical University of Athens
-# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 3
+# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 3.2
 
 import gurobipy as gp
 from gurobipy import GRB
 
 import haversine
 
-# example
-n = 4 # Number of charging options
-v = 4 # Number of candidate locations for charging stations
-m = 50 # Total number of bus lines in the problem
-k = 10 # Number of charging lines in the problem, den epanalamvanontai
-f1 = 6 # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
-f2 = 12 # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
-BigM = 100000
+# Example parameters data
+n     = 4       # Number of charging options
+v     = 4       # Number of candidate locations for charging stations
+m     = 50      # Total number of bus lines in the problem
+k     = 10      # Number of charging lines in the problem, den epanalamvanontai
+f1    = 6       # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
+f2    = 12      # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
+big_M = 100000  # A big number M
 
-# SETS
-N = [i for i in range(1, n+1)] # set of all possible station installation options
-N1 = [3, 4] # Charging option indices for SLOW chargers
-N2 = [1, 2] # Charging option indices for FAST chargers
+# Sets
+N     = [i for i in range(1, n+1)] # set of all possible station installation options
+N1    = [1, 2] # Charging option indices for SLOW chargers
+N2    = [3, 4] # Charging option indices for FAST chargers
 theta = {1:1, 2:2, 3:3, 4:4} # N -> V
 
-V = [i for i in range(1, v+1)] # set of all possible charging station physical locations
-M = [i for i in range(1, m+1)] # set of all bus trips
-K = [i for i in range(1, k+1)] # set of all trips that need charging
+V  = [i for i in range(1, v+1)] # set of all possible charging station physical locations
+M  = [i for i in range(1, m+1)] # set of all bus trips
+K  = [i for i in range(1, k+1)] # set of all trips that need charging
 F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
 F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 
@@ -31,8 +31,9 @@ F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 charging_slots_starting_times_slow = {i:(480 + i * 120) for i in F1} # Here we assume continuous time representation. We consider that \
 charging_slots_starting_times_fast = {i:(540 + i * 60) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
 tau = {1: 610, 2: 660, 3: 710, 4: 740, 5: 810, 6: 890, 7:910, 8:1000, 9:1010, 10:1050}
-pk = {1:710, 2:760, 3:810, 4:840, 5:910, 6:990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
-# pk = {1:1440, 2:1440, 3:1440, 4:1440, 5:1440, 6:1440, 7:1440, 8:1440, 9:1440, 10:1440} #xronos meta thn fortisi
+# pk = {1:710, 2:760, 3:810, 4:840, 5:910, 6:990, 7:1010, 8:1100, 9:1110, 10:1150} #xronos meta thn fortisi
+# pk = {1: 680, 2: 730, 3: 780, 4: 810, 5: 880, 6: 960, 7:980, 8:1070, 9:1080, 10:1120} #xronos meta thn fortisi
+pk = {1: 1440, 2: 1440, 3: 1440, 4: 1440, 5: 1440, 6: 1440, 7:1440, 8:1440, 9:1440, 10:1440} #xronos meta thn fortisi
 
 # Parameters
 SOC = {}
@@ -128,18 +129,17 @@ model.addConstrs(sum(u_fast[k, j, f] for k in K) <= 1 for j in N2 for f in F2) #
 
 model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (12)
 
-
 # Constraint (13)
 for j in N:
     for r in range(j, len(N)+1):
         if (j != r) & (theta[j] == theta[r]):
             model.addConstr(x[j] + x[r] <= 1)
 
-model.addConstrs((1-u_slow[k, j, f])*BigM + u_slow[k, j, f] * charging_slots_starting_times_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
-model.addConstrs((1-u_fast[k, j, f])*BigM + u_fast[k, j, f] * charging_slots_starting_times_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
+model.addConstrs((1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_starting_times_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
+model.addConstrs((1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_starting_times_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
 
-model.addConstrs(-(1-u_slow[k, j, f])*BigM + u_slow[k, j, f] * charging_slots_starting_times_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
-model.addConstrs(-(1-u_fast[k, j, f])*BigM + u_fast[k, j, f] * charging_slots_starting_times_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
+model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_starting_times_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
+model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_starting_times_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
 
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 model.optimize()
@@ -169,4 +169,5 @@ for name, val in zip(names, values):
         print(f"{name} = {val}")
 
 if model.status == GRB.OPTIMAL:
+    print("\r")
     print("Optimal solution found")
