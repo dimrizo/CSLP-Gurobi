@@ -32,10 +32,8 @@ F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
 charging_slots_starting_times_slow = {i:(360 + i * 240) for i in F1} # Here we assume continuous time representation. We consider that \
 charging_slots_starting_times_fast = {i:(500 + i * 100) for i in F2}  # fast charging slots to have 90 min duration and slow have 240 min.
 
-
 tau = {1: 610, 2: 660, 3: 710, 4: 740, 5: 810, 6: 890, 7:910, 8:1000, 9:1010, 10:1050}
 pk = {1: 680, 2: 730, 3: 780, 4: 810, 5: 880, 6: 960, 7:980, 8:1070, 9:1080, 10:1120} #xronos meta thn fortisi
-
 
 print("Set N: ", N)
 print("Set N1: ", N1)
