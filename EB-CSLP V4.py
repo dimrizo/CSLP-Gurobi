@@ -9,7 +9,7 @@ import haversine
 import synth_data_kreator
 
 # Calling the synthetic data creation module to get EB-CSLP problems
-problems = synth_data_kreator.main()
+problems = synth_data_kreator.create_problem()
 print(json.dumps(problems, indent=4))
 
 # Sets
@@ -39,13 +39,6 @@ tcV = problems[1]["CS"]["tcV"]
 tyV = problems[1]["CS"]["tyV"]
 tcK = problems[1]["bus"]["tcK"]
 tyK = problems[1]["bus"]["tyK"]
-
-# Printing coordinates
-# print("\n")
-# print(tcK)
-# print(tyK)
-# print(tcV)
-# print(tyV)
 
 big_M = problems[1]["aux"]["big_M"]
 avg_u = problems[1]["aux"]["avg_u"]

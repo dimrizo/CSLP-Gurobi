@@ -1,7 +1,7 @@
 # Railways and Transport Laboratory, National Technical University of Athens
 # Charging Stations Location Problem for Electric Buses (EB-CSLP) - Module for synthetic data creation
 
-def main():
+def create_problem():
     """Creates the synthetic data based on input parameters."""
     v  = 4       # Number of candidate locations for charging stations
     n  = 4       # Number of charging options
@@ -41,6 +41,10 @@ def main():
     tcV = {1:37.9733, 2:38.0012, 3:38.0088, 4:37.9932}
     tyV = {1:23.6689, 2:23.6737, 3:23.7629, 4:23.7930}
 
+    # print("\n")
+    # print(tcV)
+    # print(tyV)
+
     # bus-related model parameters
     M  = [i for i in range(1, m+1)] # set of all bus trips
     K  = [i for i in range(1, k+1)] # set of all trips that need charging
@@ -57,6 +61,10 @@ def main():
 
     tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455, 6:37.9712, 7:38.0585, 8:37.9822, 9:37.9612, 10:38.0555}
     tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445, 6:23.7685, 7:23.7225, 8:23.7595, 9:23.7316, 10:23.7795}
+
+    # print("\n")
+    # print(tcK)
+    # print(tyK)
 
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
