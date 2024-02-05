@@ -5,6 +5,11 @@ import gurobipy as gp
 from gurobipy import GRB
 
 import haversine
+import synth_data_kreator
+
+problems = synth_data_kreator.main()
+
+print(problems)
 
 # Example parameters data
 n     = 4       # Number of charging options
