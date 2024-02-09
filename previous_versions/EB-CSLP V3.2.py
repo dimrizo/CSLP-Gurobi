@@ -17,8 +17,8 @@ big_M = 100000  # A big number M
 
 # Sets
 N     = [i for i in range(1, n+1)] # set of all possible station installation options
-N1    = [1, 2, 3, 4] # Charging option indices for SLOW chargers
-N2    = [] # Charging option indices for FAST chargers
+N1    = [1, 2] # Charging option indices for SLOW chargers
+N2    = [3, 4] # Charging option indices for FAST chargers
 theta = {1:1, 2:2, 3:3, 4:4} # N -> V
 
 V  = [i for i in range(1, v+1)] # set of all possible charging station physical locations

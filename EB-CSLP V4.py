@@ -6,10 +6,11 @@ from gurobipy import GRB
 import json
 
 import haversine
-import synth_data_kreator
+import synth_data_creator
+from plot_coordinates import plot_coordinates_on_map
 
 # Calling the synthetic data creation module to get EB-CSLP problems
-problems = synth_data_kreator.create_problem()
+problems = synth_data_creator.create_problem()
 print(json.dumps(problems, indent=4))
 
 # Sets
@@ -145,6 +146,10 @@ print("After charging time limit:", pk)
 all_vars = model.getVars()
 values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
+
+# Call the function to plot coordinates for all dictionaries
+mapbox_key = ""
+plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_key)
 
 print("\r")
 for name, val in zip(names, values):
