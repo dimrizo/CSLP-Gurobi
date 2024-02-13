@@ -1,13 +1,20 @@
 # Railways and Transport Laboratory, National Technical University of Athens
 # Charging Stations Location Problem for Electric Buses (EB-CSLP) - Athens Synthetic Example 4
 
+import os
 import gurobipy as gp
 from gurobipy import GRB
 import json
+from dotenv import load_dotenv
 
 import haversine
 import synth_data_creator
 from plot_coordinates import plot_coordinates_on_map
+
+# Load environment variables from .env file
+load_dotenv()
+
+MAPBOX_API_KEY = os.getenv('MAPBOX_API_KEY')
 
 # Calling the synthetic data creation module to get EB-CSLP problems
 problems = synth_data_creator.create_problem()
@@ -18,7 +25,7 @@ N     = problems[1]["CS"]["N"]
 N1    = problems[1]["CS"]["N1"] # Charging option indices for SLOW chargers
 N2    = problems[1]["CS"]["N2"] # Charging option indices for FAST chargers
 theta = problems[1]["CS"]["theta"]
-b = problems[1]["CS"]["b"]
+b     = problems[1]["CS"]["b"]
 
 V  = problems[1]["CS"]["V"] # set of all possible charging station physical locations
 M  = problems[1]["bus"]["M"] # set of all bus trips
@@ -66,12 +73,12 @@ for k in K:
         t[(k, j)] = d[(k, j)] / avg_u
 
 # Printing travel times dictionary
-# print("\n")
-# print("Printing travel times matrix in minutes: ")
-# for k in K:
-#     for j in N:
-#         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-#     print("\r")
+print("\n")
+print("Printing travel times matrix in minutes: ")
+for k in K:
+    for j in N:
+        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+    print("\r")
 
 a = {}
 for i in M:
@@ -148,8 +155,7 @@ values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
 # Call the function to plot coordinates for all dictionaries
-mapbox_key = ""
-plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_key)
+plot_coordinates_on_map(tcK, tyK, tcV, tyV, MAPBOX_API_KEY)
 
 print("\r")
 for name, val in zip(names, values):
