@@ -111,7 +111,7 @@ for i in M:
 #         print("(", k, ",", j, "):", a[(k, j)],  end=", ")
 #     print("\r")
 
-B = 10000
+B = 2800
 b = {1:200, 2:850, 3:350, 4:1000, 5:400, 6:1150, 7:450, 8:1300}
 
 consumption_e = 0.00074 # in kWh/meter (apo th texnikh ekthesi "Yphresies aksiologhshs programmatos pilotikhs kyklloforias hlektrikon leoforeion"
