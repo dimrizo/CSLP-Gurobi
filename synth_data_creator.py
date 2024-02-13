@@ -2,6 +2,7 @@
 # Charging Stations Location Problem for Electric Buses (EB-CSLP) - Module for synthetic data creation
 
 import gen_rand_coordinates
+import haversine
 
 def create_problem():
     """Creates the synthetic data based on input parameters."""
@@ -70,6 +71,46 @@ def create_problem():
     # print(tcK)
     # print(tyK)
 
+    # Calculating distances
+    d = {}
+    for k in K:
+        for j in N:
+            d[(k, j)] = haversine.main(tcK[k], tyK[k], tcV[theta[j]], tyV[theta[j]])
+
+    # Printing distances dictionary
+    # print("\n")
+    # print("Printing distances matrix in meters: ")
+    # for k in K:
+    #     for j in N:
+    #         print("(", k, ",", j, "):", round(d[(k, j)], 2),  end=", ")
+    #     print("\r")
+
+    t = {}
+    for k in K:
+        for j in N:
+            t[(k, j)] = d[(k, j)] / avg_u
+
+    # Printing travel times dictionary
+    print("\n")
+    print("Printing travel times matrix in minutes: ")
+    for k in K:
+        for j in N:
+            print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+        print("\r")
+
+    a = {}
+    for i in M:
+        for j in N:
+            a[(i, j)] = 1
+
+    # Printing connection feasibility matrix
+    # print("\n")
+    # print("Printing connection feasibility matrix: ")
+    # for k in K:
+    #     for j in N:
+    #         print("(", k, ",", j, "):", a[(k, j)],  end=", ")
+    #     print("\r")
+
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
     F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
@@ -77,14 +118,13 @@ def create_problem():
     charging_slots_fast = {i:(charging_start_time + (i-1) * charging_time_fast) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
     pk = {i:(tau[i] + charging_window) for i in tau}
 
-
     problems = {1: {"CS":       {"V": V, "N": N, "N1": N1, "N2": N2, "theta": theta, "b": b, "tcV": tcV, "tyV": tyV},
                     "bus":      {"M": M, "K": K, "SOC": SOC, "SOC_min": SOC_min, "tcK": tcK, "tyK": tyK},
                     "time":     {"F1": F1, "F2": F2, 
-                                 "charging_slots_slow": charging_slots_slow, 
+                                 "charging_slots_slow": charging_slots_slow,
                                  "charging_slots_fast": charging_slots_fast,
                                  "tau": tau, "pk": pk},
-                    "matrices": {},
+                    "matrices": {"a": a, "d": d, "t": t},
                     "aux":      {"big_M": big_M, "avg_u": avg_u, "consumption_e": consumption_e, "total_B": total_B}
     }}
 

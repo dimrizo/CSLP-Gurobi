@@ -7,7 +7,6 @@ from gurobipy import GRB
 import json
 from dotenv import load_dotenv
 
-import haversine
 import synth_data_creator
 from plot_coordinates import plot_coordinates_on_map
 
@@ -18,7 +17,7 @@ MAPBOX_API_KEY = os.getenv('MAPBOX_API_KEY')
 
 # Calling the synthetic data creation module to get EB-CSLP problems
 problems = synth_data_creator.create_problem()
-print(json.dumps(problems, indent=4))
+# print(json.dumps(problems, indent=4))
 
 # Sets
 N     = problems[1]["CS"]["N"]
@@ -53,45 +52,9 @@ avg_u = problems[1]["aux"]["avg_u"]
 consumption_e = problems[1]["aux"]["consumption_e"]
 total_B = problems[1]["aux"]["total_B"]
 
-# Calculating distances
-d = {}
-for k in K:
-    for j in N:
-        d[(k, j)] = haversine.main(tcK[k], tyK[k], tcV[theta[j]], tyV[theta[j]])
-
-# Printing distances dictionary
-# print("\n")
-# print("Printing distances matrix in meters: ")
-# for k in K:
-#     for j in N:
-#         print("(", k, ",", j, "):", round(d[(k, j)], 2),  end=", ")
-#     print("\r")
-
-t = {}
-for k in K:
-    for j in N:
-        t[(k, j)] = d[(k, j)] / avg_u
-
-# Printing travel times dictionary
-print("\n")
-print("Printing travel times matrix in minutes: ")
-for k in K:
-    for j in N:
-        print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-    print("\r")
-
-a = {}
-for i in M:
-    for j in N:
-        a[(i, j)] = 1
-
-# Printing connection feasibility matrix
-# print("\n")
-# print("Printing connection feasibility matrix: ")
-# for k in K:
-#     for j in N:
-#         print("(", k, ",", j, "):", a[(k, j)],  end=", ")
-#     print("\r")
+a = problems[1]["matrices"]["a"]
+d = problems[1]["matrices"]["d"]
+t = problems[1]["matrices"]["t"]
 
 # Initialize the Gurobi model
 model = gp.Model()
