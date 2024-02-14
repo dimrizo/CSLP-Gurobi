@@ -17,7 +17,7 @@ def main(num_points):
 	counter = 0
 	latitudes = {}
 	longitudes = {}
-	# random.seed(1)
+	random.seed(10)
 	while counter < num_points:
 		random_lat = random.uniform(min_x, max_x)
 		random_lon = random.uniform(min_y, max_y)

@@ -71,17 +71,17 @@ model.addConstrs(sum(a[i, j] * x[j] for j in N) - 1 >= 0 for i in M) # Constrain
 model.addConstrs(sum(t[k, j] * q[k, j] for j in N) == y[k] for k in K) # Constraint (5)
 model.addConstr(sum(x[j] * b[j] for j in N) <= total_B) # Constraint (6)
 model.addConstrs(q[k, j] <= x[j] for k in K for j in N) # Constraint (7)
-model.addConstrs(sum(q[k, j] for k in K) >= x[j] for j in N) #To ensure that xj does not take value of 1 if no trip is assigned to charging station j
-model.addConstrs(sum(q[k, j] for j in N) == 1 for k in K) # Constraint (8)
+model.addConstrs(sum(q[k, j] for k in K) >= x[j] for j in N)  # Constraint (8) To ensure that xj does not take value of 1 if no trip is assigned to charging station j
+model.addConstrs(sum(q[k, j] for j in N) == 1 for k in K) # Constraint (9)
 
-model.addConstrs(sum(u_slow[k, j, f] for f in F1) + sum(u_fast[k, j, f] for f in F2) <= q[k, j] for k in K for j in N) # new constraint
+model.addConstrs(sum(u_slow[k, j, f] for f in F1) + sum(u_fast[k, j, f] for f in F2) <= q[k, j] for k in K for j in N) # new constraint (10)
 
-model.addConstrs(sum(sum(u_slow[k, j, f] for f in F1) for j in N1) + sum(sum(u_fast[k, j, f] for f in F2) for j in N2) == 1 for k in K) # New constraint (9)
+model.addConstrs(sum(sum(u_slow[k, j, f] for f in F1) for j in N1) + sum(sum(u_fast[k, j, f] for f in F2) for j in N2) == 1 for k in K) # New constraint (11)
 
-model.addConstrs(sum(u_slow[k, j, f] for k in K) <= 1 for j in N1 for f in F1) # New constraint (11Α)
-model.addConstrs(sum(u_fast[k, j, f] for k in K) <= 1 for j in N2 for f in F2) # New constraint (11Β)
+model.addConstrs(sum(u_slow[k, j, f] for k in K) <= 1 for j in N1 for f in F1) # New constraint (12)
+model.addConstrs(sum(u_fast[k, j, f] for k in K) <= 1 for j in N2 for f in F2) # New constraint (13)
 
-model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (12)
+model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (14)
 
 # Constraint (13)
 for j in N:
