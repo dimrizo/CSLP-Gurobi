@@ -81,7 +81,7 @@ model.addConstrs(sum(sum(u_slow[k, j, f] for f in F1) for j in N1) + sum(sum(u_f
 model.addConstrs(sum(u_slow[k, j, f] for k in K) <= 1 for j in N1 for f in F1) # New constraint (12)
 model.addConstrs(sum(u_fast[k, j, f] for k in K) <= 1 for j in N2 for f in F2) # New constraint (13)
 
-model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min for k in K for j in N) # Constraint (14)
+model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min[k] for k in K for j in N) # Constraint (14)
 
 # Constraint (13)
 for j in N:
