@@ -6,12 +6,15 @@ import gurobipy as gp
 from gurobipy import GRB
 import json
 from dotenv import load_dotenv
+import random
 
 import synth_data_creator
 from plot_coordinates import plot_coordinates_on_map
 
 # Load environment variables from .env file
 load_dotenv()
+
+random.seed(10)
 
 MAPBOX_API_KEY = os.getenv('MAPBOX_API_KEY')
 
