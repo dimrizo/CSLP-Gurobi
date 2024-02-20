@@ -9,9 +9,9 @@ import haversine
 def create_problem():
     """Creates the synthetic data based on input parameters."""
     v  = 4       # Number of candidate locations for charging stations
-    n  = 300       # Number of charging options
-    m  = 700      # Total number of bus lines in the problem
-    k  = 500      # Number of charging lines in the problem, den epanalamvanontai
+    n  = 7       # Number of charging options
+    m  = 50      # Total number of bus lines in the problem
+    k  = 20      # Number of charging lines in the problem, den epanalamvanontai
     f1 = 6       # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
     f2 = 12      # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
 
@@ -109,13 +109,13 @@ def create_problem():
         for j in N:
             t[(k, j)] = d[(k, j)] / avg_u
 
-    # Printing travel times dictionary
-    # print("\n")
-    # print("Printing travel times matrix in minutes: ")
-    # for k in K:
-    #     for j in N:
-    #         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-    #     print("\r")
+    #Printing travel times dictionary
+    print("\n")
+    print("Printing travel times matrix in minutes: ")
+    for k in K:
+        for j in N:
+            print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+        print("\r")
 
     a = {}
     for i in M:
@@ -134,26 +134,28 @@ def create_problem():
     total_B = 100000000000000
     # b = {1: 700, 2: 750, 3: 500, 4: 550, 5: 600, 6: 650, 7: 900, 8: 950}
     b = {i: (200 + random.randint(50, 1000)) for i in N}
-
+    
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
     F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
     charging_start_time = 600
     charging_time_slow = 120
     charging_time_fast = 60
-    charging_window = 87
+    #charging_window = 87
     charging_slots_slow = {i: (charging_start_time + (i-1) * charging_time_slow) for i in F1} # Here we assume continuous time representation. We consider that \
     charging_slots_fast = {i: (charging_start_time + (i-1) * charging_time_fast) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
     # tau = {i: ((i*30) + charging_start_time) for i in K}
     tau = {i: (charging_start_time + (i*(400/k)) + random.randint(0, 200)) for i in K}
-    pk = {i: (tau[i] + charging_window) for i in tau}
+    #pk = {i: (tau[i] + charging_window) for i in tau}
+    pk1 = {i: (tau[i] + 120) for i in tau}
+    pk2 = {i: (tau[i] + 60) for i in tau}
 
     problems = {1: {"CS":       {"V": V, "N": N, "N1": N1, "N2": N2, "theta": theta, "b": b, "tcV": tcV, "tyV": tyV},
                     "bus":      {"M": M, "K": K, "SOC": SOC, "SOC_min": SOC_min, "tcK": tcK, "tyK": tyK},
                     "time":     {"F1": F1, "F2": F2, 
                                  "charging_slots_slow": charging_slots_slow,
                                  "charging_slots_fast": charging_slots_fast,
-                                 "tau": tau, "pk": pk},
+                                 "tau": tau, "pk1": pk1, "pk2": pk2},
                     "matrices": {"a": a, "d": d, "t": t},
                     "aux":      {"big_M": big_M, "avg_u": avg_u, "consumption_e": consumption_e, "total_B": total_B}
     }}

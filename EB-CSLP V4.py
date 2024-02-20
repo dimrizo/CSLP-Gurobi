@@ -39,7 +39,9 @@ F2 = problems[1]["time"]["F2"] # set of FAST charging time slots
 charging_slots_slow = problems[1]["time"]["charging_slots_slow"] # Here we assume continuous time representation. We consider that \
 charging_slots_fast = problems[1]["time"]["charging_slots_fast"]  # fast charging slots to have 60 min duration and slow have 120 min.
 tau = problems[1]["time"]["tau"]
-pk = problems[1]["time"]["pk"]
+#pk = problems[1]["time"]["pk"]
+pk1 = problems[1]["time"]["pk1"]
+pk2 = problems[1]["time"]["pk2"]
 
 # Parameters
 SOC = problems[1]["bus"]["SOC"]
@@ -90,8 +92,10 @@ model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min[k] for 
 
 model.addConstrs((1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
 model.addConstrs((1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
-model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
-model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
+# model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
+# model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
+model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk1[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
+model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk2[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 
 model.optimize()
@@ -109,14 +113,14 @@ print("Set F2: ", F2)
 print("Charging slots starting times for SLOW chargers:", charging_slots_slow)
 print("Charging slots starting times for FAST chargers:", charging_slots_fast)
 print("tau:", tau)
-print("After charging time limit:", pk)
+#print("After charging time limit:", pk)
 
 all_vars = model.getVars()
 values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
 # Call the function to plot coordinates for all dictionaries
-plot_coordinates_on_map(tcK, tyK, tcV, tyV, MAPBOX_API_KEY)
+#plot_coordinates_on_map(tcK, tyK, tcV, tyV, MAPBOX_API_KEY)
 
 print("\r")
 for name, val in zip(names, values):
