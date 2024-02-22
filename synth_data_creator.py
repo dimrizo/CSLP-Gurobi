@@ -141,14 +141,15 @@ def create_problem():
     charging_start_time = 600
     charging_time_slow = 120
     charging_time_fast = 60
-    #charging_window = 87
+    charging_start_window_1 = 120
+    charging_start_window_2 = 60
     charging_slots_slow = {i: (charging_start_time + (i-1) * charging_time_slow) for i in F1} # Here we assume continuous time representation. We consider that \
     charging_slots_fast = {i: (charging_start_time + (i-1) * charging_time_fast) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
     # tau = {i: ((i*30) + charging_start_time) for i in K}
     tau = {i: (charging_start_time + (i*(400/k)) + random.randint(0, 200)) for i in K}
     #pk = {i: (tau[i] + charging_window) for i in tau}
-    pk1 = {i: (tau[i] + 120) for i in tau}
-    pk2 = {i: (tau[i] + 60) for i in tau}
+    pk1 = {i: (tau[i] + charging_start_window_1) for i in tau}
+    pk2 = {i: (tau[i] + charging_start_window_2) for i in tau}
 
     problems = {1: {"CS":       {"V": V, "N": N, "N1": N1, "N2": N2, "theta": theta, "b": b, "tcV": tcV, "tyV": tyV},
                     "bus":      {"M": M, "K": K, "SOC": SOC, "SOC_min": SOC_min, "tcK": tcK, "tyK": tyK},

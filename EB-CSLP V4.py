@@ -92,8 +92,6 @@ model.addConstrs((SOC[k] - consumption_e * q[k, j] * d[k, j]) >= SOC_min[k] for 
 
 model.addConstrs((1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) # Constraint (14Α)
 model.addConstrs((1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
-# model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
-# model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
 model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk1[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
 model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk2[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
 model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
@@ -113,14 +111,15 @@ print("Set F2: ", F2)
 print("Charging slots starting times for SLOW chargers:", charging_slots_slow)
 print("Charging slots starting times for FAST chargers:", charging_slots_fast)
 print("tau:", tau)
-#print("After charging time limit:", pk)
+print("After charging time limit (SLOW):", pk1)
+print("After charging time limit (FAST):", pk2)
 
 all_vars = model.getVars()
 values = model.getAttr("X", all_vars)
 names = model.getAttr("VarName", all_vars)
 
 # Call the function to plot coordinates for all dictionaries
-#plot_coordinates_on_map(tcK, tyK, tcV, tyV, MAPBOX_API_KEY)
+plot_coordinates_on_map(tcK, tyK, tcV, tyV, MAPBOX_API_KEY)
 
 print("\r")
 for name, val in zip(names, values):
