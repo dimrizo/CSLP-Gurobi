@@ -6,12 +6,14 @@ import random
 import gen_rand_coordinates
 import haversine
 
-def create_problem():
+
+
+def create_problem(k, v, n):
     """Creates the synthetic data based on input parameters."""
-    v  = 4       # Number of candidate locations for charging stations
-    n  = 7       # Number of charging options
-    m  = 50      # Total number of bus lines in the problem
-    k  = 20      # Number of charging lines in the problem, den epanalamvanontai
+    #v  = 6      # Number of candidate locations for charging stations
+    #n  = 60       # Number of charging options
+    m  = 2*k      # Total number of bus lines in the problem
+    #k  = 20      # Number of charging lines in the problem, den epanalamvanontai
     f1 = 6       # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
     f2 = 12      # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
 
@@ -43,29 +45,33 @@ def create_problem():
             counter_charging_options += 1
         remainder -= 1
 
-    N1 = []
-    N2 = []
-    for i in theta:
-        if theta[i] == 1:
-            N1.append(i)
-        if theta[i] == 2:
-            N1.append(i)
-        if theta[i] == 3:
-            N2.append(i)
-        if theta[i] == 4:
-            N2.append(i)
+    # N1, N2 construction for the 4 nodes example
+
+    # N1 = []
+    # N2 = []
+    # for i in theta:
+    #     if theta[i] == 1:
+    #         N1.append(i)
+    #     if theta[i] == 2:
+    #         N1.append(i)
+    #     if theta[i] == 3:
+    #         N2.append(i)
+    #     if theta[i] == 4:
+    #         N2.append(i)
 
     # N1 = [1, 2] # Charging option indices for SLOW chargers
     # N2 = [3, 4] # Charging option indices for FAST chargers
-    # N1 = N[::2] # Indices for SLOW chargers
-    # N2 = N[1::2] # Indices for FAST chargers
+    N1 = N[::2] # Indices for SLOW chargers
+    N2 = N[1::2] # Indices for FAST chargers
     # theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
     # theta na exei N stoixeia/kleidia tou dictionary,
     # prepei gia ta charging options tou N1 na antistoixithoun sta kleidia ton physical location tou v,
     # prepei gia ta charging options tou N2 na antistoixithoun sta kleidia ton physical location tou v.
 
-    tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932}
-    tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
+    # tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932}
+    # tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
+
+    tcV, tyV = gen_rand_coordinates.main(v)
 
     # print("\n")
     # print(tcV)
@@ -134,7 +140,7 @@ def create_problem():
     total_B = 100000000000000
     # b = {1: 700, 2: 750, 3: 500, 4: 550, 5: 600, 6: 650, 7: 900, 8: 950}
     b = {i: (200 + random.randint(50, 1000)) for i in N}
-    
+
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
     F2 = [i for i in range(1, f2+1)] # set of FAST charging time slots
