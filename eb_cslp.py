@@ -46,8 +46,8 @@ def main(k, v, n):
     charging_slots_fast = problems[1]["time"]["charging_slots_fast"]  # fast charging slots to have 60 min duration and slow have 120 min.
     tau = problems[1]["time"]["tau"]
     #pk = problems[1]["time"]["pk"]
-    pk1 = problems[1]["time"]["pk1"]
-    pk2 = problems[1]["time"]["pk2"]
+    pk1 = problems[1]["time"]["P1k"]
+    pk2 = problems[1]["time"]["P2k"]
 
     # Parameters
     SOC = problems[1]["bus"]["SOC"]
