@@ -17,8 +17,10 @@ import time
 # Load environment variables from .env file
 load_dotenv()
 
+start = time.time()
+
 def main(k, v, n):
-    start = time.time()
+    execution_start = time.time()
 
     random.seed(10)
 
@@ -46,8 +48,8 @@ def main(k, v, n):
     charging_slots_fast = problems[1]["time"]["charging_slots_fast"]  # fast charging slots to have 60 min duration and slow have 120 min.
     tau = problems[1]["time"]["tau"]
     #pk = problems[1]["time"]["pk"]
-    pk1 = problems[1]["time"]["pk1"]
-    pk2 = problems[1]["time"]["pk2"]
+    P1k = problems[1]["time"]["P1k"]
+    P2k = problems[1]["time"]["P2k"]
 
     # Parameters
     SOC = problems[1]["bus"]["SOC"]
@@ -100,8 +102,8 @@ def main(k, v, n):
     model.addConstrs((1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] >= (tau[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) # Constraint (14Β)
     # model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
     # model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
-    model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (pk1[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
-    model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (pk2[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
+    model.addConstrs(-(1-u_slow[k, j, f])*big_M + u_slow[k, j, f] * charging_slots_slow[f] <= (P1k[k] + t[k, j]) * q[k, j] for k in K for j in N1 for f in F1) #gia na mhn fortizei poly argotera
+    model.addConstrs(-(1-u_fast[k, j, f])*big_M + u_fast[k, j, f] * charging_slots_fast[f] <= (P2k[k] + t[k, j]) * q[k, j] for k in K for j in N2 for f in F2) #gia na mhn fortizei poly argotera
     model.setObjective(sum(y[k] for k in K), GRB.MINIMIZE)
 
     model.optimize()
@@ -146,6 +148,7 @@ def main(k, v, n):
             n) + " charging options.")
 
     end = time.time()
-    computation_time = end-start
+    computation_time = end-execution_start
 
-    return solution_status, computation_time
+    total_time = end - start
+    return solution_status, computation_time, total_time
