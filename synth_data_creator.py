@@ -10,10 +10,10 @@ import haversine
 
 def create_problem(k, v, n):
     """Creates the synthetic data based on input parameters."""
-    #v  = 6      # Number of candidate locations for charging stations
-    #n  = 60       # Number of charging options
+    # v  = 6      # Number of candidate locations for charging stations
+    # n  = 60       # Number of charging options
     m  = 2*k      # Total number of bus lines in the problem
-    #k  = 20      # Number of charging lines in the problem, den epanalamvanontai
+    # k  = 20      # Number of charging lines in the problem, den epanalamvanontai
     f1 = 6       # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
     f2 = 12      # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
 
@@ -116,12 +116,12 @@ def create_problem(k, v, n):
             t[(k, j)] = d[(k, j)] / avg_u
 
     #Printing travel times dictionary
-    print("\n")
-    print("Printing travel times matrix in minutes: ")
-    for k in K:
-        for j in N:
-            print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-        print("\r")
+    # print("\n")
+    # print("Printing travel times matrix in minutes: ")
+    # for k in K:
+    #     for j in N:
+    #         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+    #     print("\r")
 
     a = {}
     for i in M:
