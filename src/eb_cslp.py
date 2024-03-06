@@ -148,4 +148,4 @@ def main(k, v, n):
     return solution_status, computation_time, total_time
 
 if __name__ == "__main__":
-    main(11, 4, 4)
+    main(10, 9, 18)

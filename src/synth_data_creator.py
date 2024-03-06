@@ -9,9 +9,10 @@ import haversine
 
 def create_problem(k, v, n):
     """Creates the synthetic data based on input parameters."""
-    # v  = 6      # Number of candidate locations for charging stations
-    # n  = 60       # Number of charging options
-    m  = 2*k      # Total number of bus lines in the problem
+    #v  = 9      # Number of candidate locations for charging stations
+    #n  = 18      # Number of charging options
+    #m  = 2*k      # Total number of bus lines in the problem for start experiments
+    m  = 78
     # k  = 20      # Number of charging lines in the problem, den epanalamvanontai
     f1 = 6       # Number of charging slots for SLOW chargers (i.e. medium powered)
     f2 = 12      # Number of charging slots for FAST chargers (i.e. high powered, more since they refer to smaller time intervals)
@@ -44,34 +45,34 @@ def create_problem(k, v, n):
         remainder -= 1
 
     # N1, N2 construction for the 4 nodes example (toy network)
-    N1 = []
-    N2 = []
-    for i in theta:
-        if theta[i] == 1:
-            N1.append(i)
-        if theta[i] == 2:
-            N1.append(i)
-        if theta[i] == 3:
-            N2.append(i)
-        if theta[i] == 4:
-            N2.append(i)
+    # N1 = []
+    # N2 = []
+    # for i in theta:
+    #     if theta[i] == 1:
+    #         N1.append(i)
+    #     if theta[i] == 2:
+    #         N1.append(i)
+    #     if theta[i] == 3:
+    #         N2.append(i)
+    #     if theta[i] == 4:
+    #         N2.append(i)
 
-    N1 = [1, 2] # Charging option indices for SLOW chargers (hardcoded, toy network)
-    N2 = [3, 4] # Charging option indices for FAST chargers (hardcoded, toy network)
-    # N1 = N[::2] # Indices for SLOW chargers
-    # N2 = N[1::2] # Indices for FAST chargers
-    theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
+    #N1 = [1, 2] # Charging option indices for SLOW chargers (hardcoded, toy network)
+    #N2 = [3, 4] # Charging option indices for FAST chargers (hardcoded, toy network)
+    N1 = N[::2] # Indices for SLOW chargers
+    N2 = N[1::2] # Indices for FAST chargers
+    #theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
 
     # Case study 1: toy example: hardcoded coordinates for candidate charging stations
-    tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932} 
-    tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
+    # tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932}
+    # tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
 
     # for case study 2: computational time experimentation
     # tcV, tyV = gen_rand_coordinates.main(v)
 
     # for case study 3: Municipality of Athens
-    #
-    #
+    tcV = {1: 37.98062, 2: 37.97071, 3: 37.97632, 4: 37.93256, 5: 38.01174, 6: 38.09556, 7: 37.97827, 8: 37.99782, 9: 38.05431}
+    tyV = {1: 23.70391, 2: 23.66778, 3: 23.6913, 4: 23.71847, 5: 23.87078, 6: 23.69189, 7: 23.68983, 8: 23.7231, 9: 23.74294}
 
     # print("\n")
     # print(tcV)
@@ -87,13 +88,19 @@ def create_problem(k, v, n):
     for k in K:
         SOC_min[k] = 20  # in kWh
 
-    tcK, tyK = gen_rand_coordinates.main(k)
+    #tcK, tyK = gen_rand_coordinates.main(k)
 
     # Bus stops coordinates hardcoded for toy network, comment out for start_experiments.py
-    tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455,
-           6:37.9612, 7:38.0385, 8:38.0133,  9:37.9722, 10:37.9912, 11:38.0459}
-    tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445,
-           6:23.7595, 7:23.7025, 8:23.71328, 9:23.75, 10:23.7355, 11:23.770}
+    # tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455,
+    #      6:37.9612, 7:38.0385, 8:38.0133,  9:37.9722, 10:37.9912, 11:38.0459}
+    # tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445,
+    #       6:23.7595, 7:23.7025, 8:23.71328, 9:23.75, 10:23.7355, 11:23.770}
+
+    # Bus stops coordinates hardcoded for Municipality of Athens, comment out for start_experiments.py
+    tcK = {1: 37.98571, 2: 37.98013, 3: 37.98935, 4: 37.98159, 5: 37.99376,
+           6: 37.99675, 7: 37.99756, 8: 37.99776, 9: 38.00311, 10: 37.98038}
+    tyK = {1: 23.73113, 2: 23.73482, 3: 23.70895, 4: 23.70412, 5: 23.77718,
+           6: 23.77888, 7: 23.69946, 8: 23.69926, 9: 23.71234, 10: 23.73539}
 
     # print("\n")
     # print(tcK)
@@ -145,6 +152,7 @@ def create_problem(k, v, n):
     total_B = 100000000000000
     # b = {1: 700, 2: 750, 3: 500, 4: 550, 5: 600, 6: 650, 7: 900, 8: 950}
     b = {i: (200 + random.randint(50, 1000)) for i in N}
+    print(b)
 
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots
