@@ -1,12 +1,11 @@
 # Railways and Transport Laboratory, National Technical University of Athens
-# Charging Stations Location Problem for Electric Buses (EB-CSLP) - Module for synthetic data creation
+# Charging Stations Location Problem for Electric Buses (EB-CSLP)
+# Synthetic data creation modules based on desired k, v, n parameters values
 
 import random
 
 import gen_rand_coordinates
 import haversine
-
-
 
 def create_problem(k, v, n):
     """Creates the synthetic data based on input parameters."""
@@ -14,8 +13,8 @@ def create_problem(k, v, n):
     # n  = 60       # Number of charging options
     m  = 2*k      # Total number of bus lines in the problem
     # k  = 20      # Number of charging lines in the problem, den epanalamvanontai
-    f1 = 6       # Number of charging slots for SLOW chargers (less since one charging slot occupies more hours in a day)
-    f2 = 12      # Number of charging slots for FAST chargers (more since they refer to smaller time intervals)
+    f1 = 6       # Number of charging slots for SLOW chargers (i.e. medium powered)
+    f2 = 12      # Number of charging slots for FAST chargers (i.e. high powered, more since they refer to smaller time intervals)
 
     big_M = 100000  # A big number M
     # Average bus speed for urban environments extracted from:
@@ -33,7 +32,6 @@ def create_problem(k, v, n):
 
     counter_charging_options = 1
     for i in V:
-
         if remainder > 0:
             loop_range = quotient + 1
         else:
@@ -45,33 +43,35 @@ def create_problem(k, v, n):
             counter_charging_options += 1
         remainder -= 1
 
-    # N1, N2 construction for the 4 nodes example
+    # N1, N2 construction for the 4 nodes example (toy network)
+    N1 = []
+    N2 = []
+    for i in theta:
+        if theta[i] == 1:
+            N1.append(i)
+        if theta[i] == 2:
+            N1.append(i)
+        if theta[i] == 3:
+            N2.append(i)
+        if theta[i] == 4:
+            N2.append(i)
 
-    # N1 = []
-    # N2 = []
-    # for i in theta:
-    #     if theta[i] == 1:
-    #         N1.append(i)
-    #     if theta[i] == 2:
-    #         N1.append(i)
-    #     if theta[i] == 3:
-    #         N2.append(i)
-    #     if theta[i] == 4:
-    #         N2.append(i)
+    N1 = [1, 2] # Charging option indices for SLOW chargers (hardcoded, toy network)
+    N2 = [3, 4] # Charging option indices for FAST chargers (hardcoded, toy network)
+    # N1 = N[::2] # Indices for SLOW chargers
+    # N2 = N[1::2] # Indices for FAST chargers
+    theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
 
-    # N1 = [1, 2] # Charging option indices for SLOW chargers
-    # N2 = [3, 4] # Charging option indices for FAST chargers
-    N1 = N[::2] # Indices for SLOW chargers
-    N2 = N[1::2] # Indices for FAST chargers
-    # theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
-    # theta na exei N stoixeia/kleidia tou dictionary,
-    # prepei gia ta charging options tou N1 na antistoixithoun sta kleidia ton physical location tou v,
-    # prepei gia ta charging options tou N2 na antistoixithoun sta kleidia ton physical location tou v.
+    # Case study 1: toy example: hardcoded coordinates for candidate charging stations
+    tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932} 
+    tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
 
-    # tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932}
-    # tyV = {1: 23.6689, 2: 23.6737, 3: 23.7629, 4: 23.7930}
+    # for case study 2: computational time experimentation
+    # tcV, tyV = gen_rand_coordinates.main(v)
 
-    tcV, tyV = gen_rand_coordinates.main(v)
+    # for case study 3: Municipality of Athens
+    #
+    #
 
     # print("\n")
     # print(tcV)
@@ -89,8 +89,11 @@ def create_problem(k, v, n):
 
     tcK, tyK = gen_rand_coordinates.main(k)
 
-    # tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455, 6:37.9712, 7:38.0585, 8:37.9822, 9:37.9612, 10:38.0555}
-    # tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445, 6:23.7685, 7:23.7225, 8:23.7595, 9:23.7316, 10:23.7795}
+    # Bus stops coordinates hardcoded for toy network, comment out for start_experiments.py
+    tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455,
+           6:37.9612, 7:38.0385, 8:38.0133,  9:37.9722, 10:37.9912, 11:38.0459}
+    tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445,
+           6:23.7595, 7:23.7025, 8:23.71328, 9:23.75, 10:23.7355, 11:23.770}
 
     # print("\n")
     # print(tcK)
@@ -115,13 +118,13 @@ def create_problem(k, v, n):
         for j in N:
             t[(k, j)] = d[(k, j)] / avg_u
 
-    #Printing travel times dictionary
-    # print("\n")
-    # print("Printing travel times matrix in minutes: ")
-    # for k in K:
-    #     for j in N:
-    #         print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
-    #     print("\r")
+    # Printing travel times dictionary
+    print("\n")
+    print("Printing travel times matrix in minutes: ")
+    for k in K:
+        for j in N:
+            print("(", k, ",", j, "):", round(t[(k, j)], 2),  end=", ")
+        print("\r")
 
     a = {}
     for i in M:
@@ -135,7 +138,9 @@ def create_problem(k, v, n):
     #     for j in N:
     #         print("(", k, ",", j, "):", a[(k, j)],  end=", ")
     #     print("\r")
-            
+
+    print("\r") #one more print, before Gurobi output
+
     # Budget related
     total_B = 100000000000000
     # b = {1: 700, 2: 750, 3: 500, 4: 550, 5: 600, 6: 650, 7: 900, 8: 950}
@@ -149,10 +154,11 @@ def create_problem(k, v, n):
     charging_time_fast = 60
     charging_start_window_1 = 120
     charging_start_window_2 = 60
+    # charging_start_window_1 = charging_start_window_2 # for toy network example, comment otherwise
     charging_slots_slow = {i: (charging_start_time + (i-1) * charging_time_slow) for i in F1} # Here we assume continuous time representation. We consider that \
     charging_slots_fast = {i: (charging_start_time + (i-1) * charging_time_fast) for i in F2}  # fast charging slots to have 60 min duration and slow have 120 min.
     # tau = {i: ((i*30) + charging_start_time) for i in K}
-    tau = {i: (charging_start_time + (i*(400/k)) + random.randint(0, 200)) for i in K}
+    tau = {i: round((charging_start_time + (i*(400/k)) + random.randint(0, 200)), 1) for i in K}
     #pk = {i: (tau[i] + charging_window) for i in tau}
     P1k = {i: (tau[i] + charging_start_window_1) for i in tau}
     P2k = {i: (tau[i] + charging_start_window_2) for i in tau}

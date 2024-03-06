@@ -1,6 +1,11 @@
-import eb_cslp
+# Railways and Transport Laboratory, National Technical University of Athens
+# Charging Stations Location Problem for Electric Buses (EB-CSLP)
+# Module for computational time experimentation - Calls eb_cslp and synthetic \
+# data creator multiple times based several ranges for k, v, n parameters values.
 
 import time
+
+import eb_cslp
 
 from gurobipy import GRB
 
@@ -11,14 +16,10 @@ def clean_memory(exceptions):
             del globals()[name]
 
 def main():
-    charging_scenarios = [1, 2, 3]
     results = []
     solution_status = ""
 
     # Attempting problem solution for the various values of k, v, n
-    counter_1 = 4
-    counter_2 = 2
-
     dynamic_range_start_1 = 4
     dynamic_range_start_2 = 2
 
@@ -43,7 +44,7 @@ def main():
         for entry in results:
             print(entry)
         clean_memory(['results', 'time', 'eb_cslp', 'GRB', 'clean_memory'])
-        time.sleep(5) # freezing execution in order to understand state of program execution
+        time.sleep(5) # freezing execution in order to understand state of program execution (debugging)
 
 if __name__ == "__main__":
-    main()  
+    main()
