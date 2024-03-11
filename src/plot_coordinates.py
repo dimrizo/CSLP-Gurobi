@@ -10,14 +10,14 @@ def plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_access_token):
             lat=list(tcK.values()),
             lon=list(tyK.values()),
             mode='markers+text',            # Display markers and optionally text
-            marker=dict(size=20, color='coral'),
+            marker=dict(size=25, color='coral'),
             text=[f"Bus line {key} (last stop)" for key in tcK.keys()],                                 # Label text next to the marker
             hovertext=[f"Coordinates: {lat}, {lon}" for lat, lon in zip(tcK.values(), tyK.values())],   # Text displayed on hover
             hoverinfo="text",               # Display hovertext only
             textposition="bottom center",     # Position the text
             showlegend=False,
             textfont=dict(
-                size=14,
+                size=18,
                 color='black'
             )
         ),
@@ -25,14 +25,14 @@ def plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_access_token):
             lat=list(tcV.values()),
             lon=list(tyV.values()),
             mode='markers+text',            # Display markers and optionally text
-            marker=dict(size=20, color='blue'),
+            marker=dict(size=25, color='blue'),
             text=[f"Candidate Charger {key}" for key in tcV.keys()],                                    # Label text next to the marker
             hovertext=[f"Coordinates: {lat}, {lon}" for lat, lon in zip(tcV.values(), tyV.values())],   # Text displayed on hover
             hoverinfo="text",               # Display hovertext only
             textposition="bottom center",   # Position the text
             showlegend=False,
             textfont=dict(
-                size=14,
+                size=18,
                 color='blue'
             )
         )
