@@ -50,6 +50,8 @@ For any queries or further information, please reach out to any of the authors o
 This work was partially funded by the European Union's Horizon Europe research and innovation programme metaCCAZE (Grant Agreement no ----).
 Find more information at the link: https://www.metaccaze-project.eu/
 
+<br>
+
 <img src="https://www.metaccaze-project.eu/wp-content/uploads/2024/02/metaCCAZE-Logo.svg" width="664" height="150">
 
 <br><br>
@@ -57,5 +59,9 @@ Find more information at the link: https://www.metaccaze-project.eu/
 This work has been suppored by the Railways and Transport Laboratory at the National Technical Univerity of Athens (NTUA).
 Find more information at the link: https://railwaysandtransportlab.civil.ntua.gr/
 
-<img src="https://railwaysandtransportlab.civil.ntua.gr/wp-content/uploads/2023/04/RTLab_logo-1-1024x372.png" width="850" height="300">
+<br>
+
+<img src="https://railwaysandtransportlab.civil.ntua.gr/wp-content/uploads/2023/04/RTLab_logo-1-1024x372.png" width="470" height="170">
+
+<br>
 
