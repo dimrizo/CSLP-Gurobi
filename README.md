@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Mixed Integer-Linear Problem (MILP) model for the Charging Stations Location Problem (CSLP) when considering a public transport network operated by Electric Busses. This model has been initally presented in the publication by Gkiotsalitis et al. available at the link : (LINK TO BE ADDED HERE)
+This is a Mixed Integer-Linear Problem (MILP) model for the Charging Stations Location Problem (CSLP) when considering a public transport network operated by Electric Busses. This model has been initally presented in the publication by Gkiotsalitis et al., available at the link : (LINK TO BE ADDED HERE)
   
 ## Installation
 
@@ -10,30 +10,29 @@ Before installing the project, ensure you have Python installed on your system (
 
 1. **Install Gurobi:** Follow the instructions on the Gurobi website to install Gurobi and obtain a license. This typically involves downloading Gurobi, installing it, and setting up the license file on your machine.
 
-2. **Set Gurobi Environment Variable:** Ensure the `GRB_LICENSE_FILE` environment variable is set to the path of your Gurobi license file, and the Gurobi bin directory is added to your system’s PATH.
+2. **Set Gurobi Environment Variable:** Ensure the `GRB_LICENSE_FILE` environment variable is set to the path of your Gurobi license file and the Gurobi bin directory is added to your system’s PATH.
 
 3. **Install Gurobi Python Interface:** Once Gurobi is installed, you can install the Gurobi Python interface by running:
 
 4. **Clone and Setup Your Project:** Now, clone this repository and install the project's dependencies.
     bash
     Copy code
-    git clone https://github.com/yourusername/yourprojectname.git
-    cd yourprojectname
+    git clone https://github.com/dimrizo/CSLP-Gurobi
+    cd CSLP-Gurobi
     pip install -r requirements.txt
 
 ## Installation
 
-To use the code you can just run it as a Python script given that all dependencies are installed. Make sure that you comment in/out all necessary/unnecessary code given the model Use Case example that you want to run (as indicate in the article and Python code).
+To use the code you can just run it as a Python script given that all dependencies are installed. Make sure that you comment in/out all necessary/unnecessary code given the model Use Case example that you want to run (as indicated in the article and Python code).
 
 ## Contributing
 
 Contributions to this project are welcome! Here's how you can contribute:
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Commit your Changes
+3. Push to the Branch
+4. Open a Pull Request
 
 Please ensure your pull request adheres to the project's coding standards.
 
@@ -43,7 +42,7 @@ This repository is licensed under the Apache License 2.0 - see the LICENSE file 
 
 ## Contact
 
-For any queries or further information, please reach out to any of the authors of the article at the contact details provided there.
+For any queries or further information, please reach out to any of the authors of the article using the contact details provided there.
 
 ## Acknowledgements
 
