@@ -12,14 +12,9 @@ Before installing the project, ensure you have Python installed on your system (
 
 2. **Set Gurobi Environment Variable:** Ensure the `GRB_LICENSE_FILE` environment variable is set to the path of your Gurobi license file and the Gurobi bin directory is added to your system’s PATH.
 
-3. **Install Gurobi Python Interface:** Once Gurobi is installed, you can install the Gurobi Python interface by running:
+3. **Install Gurobi Python Interface:** Once Gurobi is installed, you can install the Gurobi Python interface with pip (that is the Gurobi Python library that is imported in our script).
 
-4. **Clone and Setup Your Project:** Now, clone this repository and install the project's dependencies.
-    bash
-    Copy code
-    git clone https://github.com/dimrizo/CSLP-Gurobi
-    cd CSLP-Gurobi
-    pip install -r requirements.txt
+4. **Clone and Setup Your Project:** Now, clone (or just download) this repository and install the project's dependencies (can be done through the requremets file).
 
 ## Installation
 
@@ -46,8 +41,7 @@ For any queries or further information, please reach out to any of the authors o
 
 ## Acknowledgements
 
-This work was partially funded by the European Union's Horizon Europe research and innovation programme metaCCAZE (Grant Agreement no ----).
-Find more information at the link: https://www.metaccaze-project.eu/
+The present work is partially funded by the metaCCAZE Project (Flexibly adapted MetaInnovations, use cases, collaborative business and governance models to accelerate deployment of smart and shared Zero Emission mobility for passengers and freight). This project has received funding from the European Union’s Horizon Europe research and innovation programme under grant agreement No. 101139678.
 
 <br>
 
