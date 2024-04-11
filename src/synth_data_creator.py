@@ -9,11 +9,10 @@ import haversine
 
 def create_problem(k, v, n):
     """Creates the synthetic data based on input parameters."""
-    #v  = 9      # Number of candidate locations for charging stations
-    #n  = 18      # Number of charging options
-    #m  = 2*k      # Total number of bus lines in the problem for start experiments
-    m  = 78
+    # v  = 9      # Number of candidate locations for charging stations
+    # n  = 18      # Number of charging options
     # k  = 20      # Number of charging lines in the problem, den epanalamvanontai
+    m = 56
     f1 = 6       # Number of charging slots for SLOW chargers (i.e. medium powered)
     f2 = 12      # Number of charging slots for FAST chargers (i.e. high powered, more since they refer to smaller time intervals)
 
@@ -28,6 +27,7 @@ def create_problem(k, v, n):
     V = [i for i in range(1, v+1)] # set of all possible charging station physical locations
     N = [i for i in range(1, n+1)] # set of all possible station installation options
 
+    # Theta construction for Case studies 2 & 3
     theta = {}
     quotient, remainder = divmod(n, v)
 
@@ -44,6 +44,11 @@ def create_problem(k, v, n):
             counter_charging_options += 1
         remainder -= 1
 
+    # Case study 1
+    # N1 = [1, 2] # Charging option indices for SLOW chargers (hardcoded, toy network)
+    # N2 = [3, 4] # Charging option indices for FAST chargers (hardcoded, toy network)
+    # theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
+
     # N1, N2 construction for the 4 nodes example (toy network)
     # N1 = []
     # N2 = []
@@ -57,11 +62,9 @@ def create_problem(k, v, n):
     #     if theta[i] == 4:
     #         N2.append(i)
 
-    #N1 = [1, 2] # Charging option indices for SLOW chargers (hardcoded, toy network)
-    #N2 = [3, 4] # Charging option indices for FAST chargers (hardcoded, toy network)
+    # Case studies 2 & 3
     N1 = N[::2] # Indices for SLOW chargers
     N2 = N[1::2] # Indices for FAST chargers
-    #theta = {1: 1, 2: 2, 3: 3, 4: 4} # N -> V
 
     # Case study 1: toy example: hardcoded coordinates for candidate charging stations
     # tcV = {1: 37.9733, 2: 38.0012, 3: 38.0088, 4: 37.9932}
@@ -88,15 +91,18 @@ def create_problem(k, v, n):
     for k in K:
         SOC_min[k] = 20  # in kWh
 
-    #tcK, tyK = gen_rand_coordinates.main(k)
-
-    # Bus stops coordinates hardcoded for toy network, comment out for start_experiments.py
+    # Case study 1: Bus stops coordinates hardcoded for toy bus network,
+    # Comment out for start_experiments.py
     # tcK = {1:37.9718, 2:37.9812, 3:38.0355, 4:37.9828, 5:38.0455,
     #      6:37.9612, 7:38.0385, 8:38.0133,  9:37.9722, 10:37.9912, 11:38.0459}
     # tyK = {1:23.7816, 2:23.7345, 3:23.7695, 4:23.7716, 5:23.7445,
     #       6:23.7595, 7:23.7025, 8:23.71328, 9:23.75, 10:23.7355, 11:23.770}
+    
+    # Case study 2
+    #tcK, tyK = gen_rand_coordinates.main(k)
 
-    # Bus stops coordinates hardcoded for Municipality of Athens, comment out for start_experiments.py
+    # Case study 3: Bus stops coordinates hardcoded for Municipality of Athens,
+    # comment out for start_experiments.py
     tcK = {1: 37.98571, 2: 37.98013, 3: 37.98935, 4: 37.98159, 5: 37.99376,
            6: 37.99675, 7: 37.99756, 8: 37.99776, 9: 38.00311, 10: 37.98038}
     tyK = {1: 23.73113, 2: 23.73482, 3: 23.70895, 4: 23.70412, 5: 23.77718,
@@ -152,7 +158,6 @@ def create_problem(k, v, n):
     total_B = 100000000000000
     # b = {1: 700, 2: 750, 3: 500, 4: 550, 5: 600, 6: 650, 7: 900, 8: 950}
     b = {i: (200 + random.randint(50, 1000)) for i in N}
-    print(b)
 
     # time-related model parameters
     F1 = [i for i in range(1, f1+1)] # set of SLOW charging time slots

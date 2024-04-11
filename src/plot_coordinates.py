@@ -9,12 +9,12 @@ def plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_access_token):
         go.Scattermapbox(
             lat=list(tcK.values()),
             lon=list(tyK.values()),
-            mode='markers+text',            # Display markers and optionally text
+            mode='markers+text',                # Display markers and optionally text
             marker=dict(size=25, color='coral'),
-            text=[f"Bus line {key} (last stop)" for key in tcK.keys()],                                 # Label text next to the marker
+            text=[f"Bus line #{key}" for key in tcK.keys()],                                 # Label text next to the marker
             hovertext=[f"Coordinates: {lat}, {lon}" for lat, lon in zip(tcK.values(), tyK.values())],   # Text displayed on hover
-            hoverinfo="text",               # Display hovertext only
-            textposition="bottom center",     # Position the text
+            hoverinfo="text",                   # Display hovertext only
+            textposition="bottom center",       # Position the text
             showlegend=False,
             textfont=dict(
                 size=18,
@@ -26,7 +26,7 @@ def plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_access_token):
             lon=list(tyV.values()),
             mode='markers+text',            # Display markers and optionally text
             marker=dict(size=25, color='blue'),
-            text=[f"Candidate Charger {key}" for key in tcV.keys()],                                    # Label text next to the marker
+            text=[f"Candidate Charger #{key}" for key in tcV.keys()],                                    # Label text next to the marker
             hovertext=[f"Coordinates: {lat}, {lon}" for lat, lon in zip(tcV.values(), tyV.values())],   # Text displayed on hover
             hoverinfo="text",               # Display hovertext only
             textposition="bottom center",   # Position the text
@@ -42,7 +42,7 @@ def plot_coordinates_on_map(tcK, tyK, tcV, tyV, mapbox_access_token):
         mapbox=dict(
             accesstoken=mapbox_access_token,
             center=dict(lat=37.9751127, lon=23.7276736),
-            style="mapbox://styles/mapbox/streets-v11",
+            style="open-street-map",
             zoom=11,
         ),
         margin=dict(l=0, r=0, b=0, t=0)

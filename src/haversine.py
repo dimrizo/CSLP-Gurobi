@@ -21,7 +21,7 @@ def main(lat_1, lon_1, lat_2, lon_2):
     c = 2 * math.asin(math.sqrt(a))
     r = 6371  # Radius of earth in kilometers. Use 3956 for miles
 
-    # print(c * r * 1000)
+    print(c * r * 1000)
 
     return c * r * 1000  # meters
 
