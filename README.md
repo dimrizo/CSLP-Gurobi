@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Mixed Integer-Linear Problem (MILP) model for the Charging Stations Location Problem (CSLP) when considering a public transport network operated by Electric Busses. This model has been initally presented in the publication by Gkiotsalitis et al., available at the link : (LINK TO BE ADDED HERE)
+This is a Mixed Integer-Linear Problem (MILP) model for the Charging Stations Location Problem (CSLP) when considering an electric bus public transport network, two types of available chargers (slow and fast) as well as their potential charging scheduling to the chargers that will be installed. This model has been initially presented in the publication by Gkiotsalitis et al., available at the link : (LINK TO BE ADDED HERE)
   
 ## Installation
 
