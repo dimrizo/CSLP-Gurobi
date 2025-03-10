@@ -45,16 +45,16 @@ The present work is partially funded by the metaCCAZE Project (Flexibly adapted 
 
 <br>
 
-<img src="https://www.metaccaze-project.eu/wp-content/uploads/2024/02/metaCCAZE-Logo.svg" width="664" height="150">
+<img src="https://www.metaccaze-project.eu/wp-content/uploads/2024/02/metaCCAZE-Logo.svg" width="750" height="130">
 
 <br><br>
 
-This work has been suppored by the Railways and Transport Laboratory at the National Technical Univerity of Athens (NTUA).
+This work has been supported by the Railways and Transport Laboratory at the National Technical University of Athens (NTUA).
 Find more information at the link: https://railwaysandtransportlab.civil.ntua.gr/
 
 <br>
 
-<img src="https://railwaysandtransportlab.civil.ntua.gr/wp-content/uploads/2023/04/RTLab_logo-1-1024x372.png" width="470" height="170">
+<img src="https://private-user-images.githubusercontent.com/10188642/420881884-cc69f42b-5533-4391-b570-d41a5cb2e0de.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDE2MDU2MjgsIm5iZiI6MTc0MTYwNTMyOCwicGF0aCI6Ii8xMDE4ODY0Mi80MjA4ODE4ODQtY2M2OWY0MmItNTUzMy00MzkxLWI1NzAtZDQxYTVjYjJlMGRlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAzMTAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMzEwVDExMTUyOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRmMWExNjBmZTAyM2UxMGJiMGI1NzA5YTcwNDQzZDkyNTkwZjA0MzFkOWM1N2MyNzQ3NWFiN2ZlODhlOTdkZjUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.OQeudgAYpWP2Y1sOxMAMZzWA-EAYih_PtHVTNCp13_o" width="916" height="170">
 
 <br>
 
