@@ -50,7 +50,7 @@ The present work is partially funded by the metaCCAZE Project (Flexibly adapted 
 <br><br>
 
 This work has been supported by the Railways and Transport Laboratory at the National Technical University of Athens (NTUA).
-Find more information at the link: https://railwaysandtransportlab.civil.ntua.gr/
+Find more information at the link: http://railwaysandtransportlab.civil.ntua.gr/
 
 <br>
 
