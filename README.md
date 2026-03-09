@@ -1,4 +1,4 @@
-# CSLP-Gurobi
+# Charging Station Location Problem for Electric Bus Networks
 
 ## Description
 
